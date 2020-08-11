@@ -45,7 +45,7 @@ app.post('/', (req, res) => {
         }
         else {
             var word = Math.random().toString(36).slice(-5)
-            var ShortenURL = 'http://localhost:3000/' + word
+            var ShortenURL = 'https://sheltered-beyond-20769.herokuapp.com/' + word
             var OriginalURL =  req.body.URL
             const url = new URL({
                 OriginalURL: OriginalURL,
