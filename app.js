@@ -5,6 +5,9 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const URL = require('./models/URL')
 
+if (process.env.NODE_ENV !== 'production'){
+    require('dotenv').config()
+}
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/UrlShortener', { useNewUrlParser: true, useUnifiedTopology: true })
 
