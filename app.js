@@ -45,7 +45,7 @@ app.post('/', (req, res) => {
         }
         else {
             var word = Math.random().toString(36).slice(-5)
-            var ShortenURL = 'https://sheltered-beyond-20769.herokuapp.com/' + word
+            var ShortenURL = 'http://localhost:3000/' + word
             var OriginalURL =  req.body.URL
             const url = new URL({
                 OriginalURL: OriginalURL,
@@ -57,7 +57,14 @@ app.post('/', (req, res) => {
             })
         }
     })
-    
+})
+
+app.get('/:id', (req, res) => {
+    let reqURL = 'http://localhost:3000/' + req.params.id
+    URL.findOne({ ShortenURL: reqURL }).then(url => {
+        return res.redirect(url.OriginalURL)
+    })
+
 })
 
 app.listen(process.env.PORT || 3000, () => {
