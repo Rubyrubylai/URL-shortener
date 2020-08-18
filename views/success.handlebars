@@ -2,5 +2,6 @@
     <center class="my-4"><a href="/" style="text-decoration:none; color:black"><h1>URL Shortener</h1></a></center>
     <p style="font-weight:bold;">Success! Please use this link:</p>
     <a href="{{OriginalURL}}"><input style="border: 0px;outline:none;" class="form-control"readonly="readonly" type="text" name="URL" id="URL" value="{{ShortenURL}}"></a>
-    <center><button data-clipboard-target="#URL" type="submit"class="btn btn-primary my-4" style="width: 200px;">copy</button></center>
+    {{>messages}}
+    <center><button data-clipboard-target="#URL" type="submit"class="btn btn-primary my-4" style="width: 200px;">copy</button></center> 
 </form>

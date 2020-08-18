@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express()
 const exphbs = require('express-handlebars')
+const session = require('express-session')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const URL = require('./models/URL')
+const flash = require('connect-flash')
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/UrlShortener', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -17,14 +19,21 @@ db.once('open', ()=> {
     console.log('mongodb connected!')
 })
 
-
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use(session({ secret: 'your secret key', resave: 'false', saveUninitialized: 'true' }))
+app.use(flash())
+
 app.get('/', (req, res) => {
     return res.render('index')
+})
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg')
+    next()
 })
 
 app.post('/', (req, res) => {
@@ -55,8 +64,13 @@ app.post('/', (req, res) => {
     })
 })
 
+app.get('/success', (req, res) => {
+    return res.render('success')
+})
+
 app.post('/success', (req, res) => {
-    console.log(req.body.URL)
+    req.flash('success_msg', '你已成功複製')
+    return res.redirect('/success')
 })
 
 app.get('/:id', (req, res) => {
