@@ -5,10 +5,6 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const URL = require('./models/URL')
 
-if (process.env.NODE_ENV !== 'production'){
-    require('dotenv').config()
-}
-
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/UrlShortener', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const db = mongoose.connection
@@ -28,7 +24,7 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-    res.render('index')
+    return res.render('index')
 })
 
 app.post('/', (req, res) => {
@@ -45,7 +41,7 @@ app.post('/', (req, res) => {
         }
         else {
             var word = Math.random().toString(36).slice(-5)
-            var ShortenURL = ' https://sheltered-beyond-20769.herokuapp.com/' + word
+            var ShortenURL = 'http://localhost:3000/' + word
             var OriginalURL =  req.body.URL
             const url = new URL({
                 OriginalURL: OriginalURL,
@@ -59,12 +55,21 @@ app.post('/', (req, res) => {
     })
 })
 
-app.get('/:id', (req, res) => {
-    let reqURL = ' https://sheltered-beyond-20769.herokuapp.com/' + req.params.id
-    URL.findOne({ ShortenURL: reqURL }).then(url => {
-        return res.redirect(url.OriginalURL)
-    })
+app.post('/success', (req, res) => {
+    console.log(req.body.URL)
+})
 
+app.get('/:id', (req, res) => {
+    let reqURL = 'http://localhost:3000/' + req.params.id
+    URL.findOne({ ShortenURL: reqURL }).then(url => {
+        if (url) {
+            let LastURL = url.OriginalURL
+            return res.redirect(LastURL)
+        } else {
+            return res.redirect('/')
+        }  
+    })
+    .catch(err => console.error(err) )
 })
 
 app.listen(process.env.PORT || 3000, () => {
