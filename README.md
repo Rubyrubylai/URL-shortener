@@ -14,4 +14,4 @@ npm install
 npm run dev
 ```
 
-4. 
+4. 開啟網址 
